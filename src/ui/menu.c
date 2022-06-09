@@ -28,10 +28,8 @@ UX_STEP_NOCB(ux_menu_ready_step_bitcoin_testnet,
              pnn,
              {&C_bitcoin_logo, "Bitcoin Testnet", "is ready"});
 
-UX_STEP_NOCB(ux_menu_ready_step_defichain, pnn, {&C_defichain_logo, "DeFiChain", "is ready"});
-UX_STEP_NOCB(ux_menu_ready_step_defichain_testnet,
-             pnn,
-             {&C_defichain_logo, "DeFiChain Testnet", "is ready"});
+UX_STEP_NOCB(ux_menu_ready_step_defichain, nn, {"DeFiChain", "is ready"});
+UX_STEP_NOCB(ux_menu_ready_step_defichain_testnet, nn, {"DeFiChain Testnet", "is ready"});
 
 UX_STEP_NOCB(ux_menu_ready_step_altcoin, nn, {"Application", "is ready"});
 
