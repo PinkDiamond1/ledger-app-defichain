@@ -633,13 +633,13 @@ DEFINES   += COIN_FLAGS=FLAG_SEGWIT_CHANGE_SUPPORT
 APPNAME ="Hydra"
 APP_LOAD_PARAMS += --path "44'/609'"
 
-else ifeq ($(COIN),dfi_testnet)
+else ifeq ($(COIN),defichain_testnet)
 
 # we're not using the lib :)
 DEFINES_LIB=
 APP_LOAD_FLAGS=--appFlags 0xa50
 
-# Bitcoin testnet (can also be used for signet)
+# DeFiChain testnet (can also be used for signet)
 DEFINES   += BIP32_PUBKEY_VERSION=0x043587CF
 DEFINES   += BIP44_COIN_TYPE=1129
 DEFINES   += BIP44_COIN_TYPE_2=1129
@@ -649,19 +649,19 @@ DEFINES   += COIN_NATIVE_SEGWIT_PREFIX=\"tf\"
 DEFINES   += COIN_FAMILY=1
 DEFINES   += COIN_COINID=\"DeFiChain\"
 DEFINES   += COIN_COINID_HEADER=\"DeFiChain\"
-DEFINES   += COIN_COINID_NAME=\"DeFiChain\\x20Testnet\"
+DEFINES   += COIN_COINID_NAME=\"DFI\\x20Testnet\"
 DEFINES   += COIN_COINID_SHORT=\"TEST\"
 DEFINES   += COIN_KIND=COIN_KIND_DEFICHAIN_TESTNET
 DEFINES   += COIN_FLAGS=FLAG_SEGWIT_CHANGE_SUPPORT
-APPNAME = "Bitcoin Test"
+APPNAME = "DeFiChain Test"
 
-else ifeq ($(COIN),dfi)
+else ifeq ($(COIN),defichain)
 
 # we're not using the lib :)
 DEFINES_LIB=
 APP_LOAD_FLAGS=--appFlags 0xa50
 
-# Bitcoin mainnet
+# DeFiChain mainnet
 DEFINES   += BIP32_PUBKEY_VERSION=0x0488B21E
 DEFINES   += BIP44_COIN_TYPE=1129
 DEFINES   += BIP44_COIN_TYPE_2=1129
@@ -675,11 +675,12 @@ DEFINES   += COIN_COINID_NAME=\"DeFiChain\"
 DEFINES   += COIN_COINID_SHORT=\"DFI\"
 DEFINES   += COIN_KIND=COIN_KIND_DEFICHAIN
 DEFINES   += COIN_FLAGS=FLAG_SEGWIT_CHANGE_SUPPORT
+APPNAME = "DeFiChain"
 
 
 else
 ifeq ($(filter clean,$(MAKECMDGOALS)),)
-$(error Unsupported COIN - use bitcoin_testnet, bitcoin, bitcoin_cash, bitcoin_gold, litecoin, dogecoin, dash, zcash, horizen, komodo, stratis, peercoin, pivx, viacoin, vertcoin, stealth, digibyte, qtum, bitcoin_private, firo, gamecredits, zclassic, xsn, nix, lbry, resistance, ravencoin, hydra, hydra_testnet, xrhodium, dfi, dfi_testnet)
+$(error Unsupported COIN - use bitcoin_testnet, bitcoin, bitcoin_cash, bitcoin_gold, litecoin, dogecoin, dash, zcash, horizen, komodo, stratis, peercoin, pivx, viacoin, vertcoin, stealth, digibyte, qtum, bitcoin_private, firo, gamecredits, zclassic, xsn, nix, lbry, resistance, ravencoin, hydra, hydra_testnet, xrhodium, defichain, defichain_testnet)
 endif
 endif
 
