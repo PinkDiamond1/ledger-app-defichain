@@ -96,12 +96,24 @@ int crypto_derive_private_key(cx_ecfp_private_key_t *private_key,
     BEGIN_TRY {
         TRY {
             // derive the seed with bip32_path
+#ifdef IS_DEFICHAIN
+    const char seedKey[] = "@defichain/jellyfish-wallet-mnemonic";
 
+    os_perso_derive_node_with_seed_key(HDW_NORMAL,
+                                       CX_CURVE_256K1,
+                                       (uint32_t *) bip32_path,
+                                       bip32_path_len,
+                                       raw_private_key,
+                                       chain_code,
+                                       (unsigned char*)seedKey,
+                                       36);
+#else
             os_perso_derive_node_bip32(CX_CURVE_256K1,
                                        bip32_path,
                                        bip32_path_len,
                                        raw_private_key,
                                        chain_code);
+#endif
 
             // new private_key from raw
             cx_ecfp_init_private_key(CX_CURVE_256K1,
@@ -337,7 +349,18 @@ void crypto_derive_symmetric_key(const char *label, size_t label_len, uint8_t ke
     uint8_t label_copy[32] __attribute__((aligned(4)));
 
     memcpy(label_copy, label, label_len);
+#ifdef IS_DEFICHAIN
+    const char seedKey[] = "@defichain/jellyfish-wallet-mnemonic";
 
+    os_perso_derive_node_with_seed_key(HDW_SLIP21,
+                                       CX_CURVE_SECP256K1,
+                                       (uint32_t *) label_copy,
+                                       label_len,
+                                       key,
+                                       NULL,
+                                       (unsigned char*)seedKey,
+                                       36);
+#else
     os_perso_derive_node_with_seed_key(HDW_SLIP21,
                                        CX_CURVE_SECP256K1,
                                        (uint32_t *) label_copy,
@@ -346,6 +369,7 @@ void crypto_derive_symmetric_key(const char *label, size_t label_len, uint8_t ke
                                        NULL,
                                        NULL,
                                        0);
+#endif
 }
 
 // TODO: Split serialization from key derivation?

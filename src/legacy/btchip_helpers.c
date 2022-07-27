@@ -318,9 +318,21 @@ void btchip_private_derive_keypair(unsigned char *bip32Path,
     }
 
     io_seproxyhal_io_heartbeat();
+#ifdef IS_DEFICHAIN
+    const char seedKey[] = "@defichain/jellyfish-wallet-mnemonic";
 
+    os_perso_derive_node_with_seed_key(HDW_NORMAL,
+                                       CX_CURVE_256K1,
+                                       u.bip32PathInt,
+                                       bip32PathLength,
+                                       u.privateComponent,
+                                       out_chainCode,
+                                       (unsigned char*)seedKey,
+                                       36);
+#else
     os_perso_derive_node_bip32(CX_CURVE_256K1, u.bip32PathInt, bip32PathLength,
                                u.privateComponent, out_chainCode);
+#endif
 
     cx_ecdsa_init_private_key(BTCHIP_CURVE, u.privateComponent, 32,
                                 private_key);
@@ -340,6 +352,10 @@ Checks if the values of a derivation path are within "normal" (arbitrary) ranges
 Account < 100, change == 1 or 0, address index < 50000
 Returns 1 if the path is unusual, or not compliant with BIP44*/
 unsigned char bip44_derivation_guard(unsigned char *bip32Path, bool is_change_path) {
+
+#ifdef IS_DEFICHAIN
+    return 0;
+#endif
 
     unsigned char i, path_len;
     unsigned int bip32PathInt[MAX_BIP32_PATH];
@@ -389,6 +405,9 @@ unsigned char enforce_bip44_coin_type(unsigned char *bip32Path, bool for_pubkey)
     unsigned int bip32PathInt[MAX_BIP32_PATH];
     // No enforcement required
     if (G_coin_config->bip44_coin_type == 0) {
+        return 1;
+    }
+    if (G_coin_config->bip44_coin_type == 1129) {
         return 1;
     }
     // Path is too short - always require a user validation if signing
