@@ -40,7 +40,7 @@ jobs:
           make clean
           make DEBUG=0 COIN=defichain_testnet BOLOS_SDK=${{ matrix.SDK }} && mv bin/ defichain-testnet-bin/
           make clean
-          make DEBUG=0 COIN=defichain_testnet_lib BOLOS_SDK=${{ matrix.SDK }} && mv bin/ defichain-testnet-lib-bin/
+          make DEBUG=0 COIN=bitcoin_testnet_lib BOLOS_SDK=${{ matrix.SDK }} && mv bin/ defichain-testnet-lib-bin/
       - name: Upload defichain app binary
         uses: actions/upload-artifact@v2
         with:
