@@ -111,13 +111,13 @@ void ui_menu_main() {
     if (G_coin_config->bip32_pubkey_version == BIP32_PUBKEY_VERSION_MAINNET) {  // mainnet
         if(G_coin_config->bip44_coin_type == DEFICHAIN_COIN_TYPE) {
             ux_flow_init(0, ux_menu_main_flow_defichain, NULL);
-        }   else {
+        } else {
             ux_flow_init(0, ux_menu_main_flow_bitcoin, NULL);
         }
     } else if (G_coin_config->bip32_pubkey_version == BIP32_PUBKEY_VERSION_TESTNET) {  // testnet
         if(G_coin_config->bip44_coin_type == DEFICHAIN_COIN_TYPE) {
             ux_flow_init(0, ux_menu_main_flow_defichain_testnet, NULL);
-        }   else {
+        } else {
             ux_flow_init(0, ux_menu_main_flow_bitcoin_testnet, NULL);
         }
     } else {
