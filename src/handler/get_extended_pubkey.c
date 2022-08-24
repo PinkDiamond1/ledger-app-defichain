@@ -34,7 +34,6 @@ static bool is_path_safe_for_pubkey_export(const uint32_t bip32_path[],
                                            size_t bip32_path_len,
                                            const uint32_t coin_types[],
                                            size_t coin_types_length) {
-
 #ifdef IS_DEFICHAIN     
     return true;
 #endif

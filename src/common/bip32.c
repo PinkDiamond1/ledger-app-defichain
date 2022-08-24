@@ -148,7 +148,6 @@ bool is_address_path_standard(const uint32_t *bip32_path,
                               const uint32_t expected_coin_types[],
                               size_t expected_coin_types_len,
                               int expected_change) {
-
 #ifdef IS_DEFICHAIN
     return true;
 #endif
