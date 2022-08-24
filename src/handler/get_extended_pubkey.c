@@ -26,6 +26,8 @@
 #include "../ui/display.h"
 #include "../ui/menu.h"
 
+#define DEFICHAIN_COIN_TYPE 1129
+
 extern global_context_t *G_coin_config;
 
 static void send_response(dispatcher_context_t *dc);
@@ -34,10 +36,7 @@ static bool is_path_safe_for_pubkey_export(const uint32_t bip32_path[],
                                            size_t bip32_path_len,
                                            const uint32_t coin_types[],
                                            size_t coin_types_length) {
-#ifdef IS_DEFICHAIN     
-    return true;
-#endif
-    if (bip32_path_len < 3) {
+    if (G_coin_config->bip44_coin_type == DEFICHAIN_COIN_TYPE) {
         return false;
     }
     uint32_t purpose = bip32_path[0] & 0x7FFFFFFF;

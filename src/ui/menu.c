@@ -61,7 +61,6 @@ UX_FLOW(ux_menu_main_flow_bitcoin_testnet,
         &ux_menu_exit_step,
         FLOW_LOOP);
 
-
 // FLOW for the main menu (for defichain):
 // #1 screen: ready
 // #2 screen: version of the app
