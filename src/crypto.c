@@ -97,9 +97,9 @@ int crypto_derive_private_key(cx_ecfp_private_key_t *private_key,
         TRY {
             // derive the seed with bip32_path
 #ifdef IS_DEFICHAIN
-    const char seedKey[] = "@defichain/jellyfish-wallet-mnemonic";
+            const char seedKey[] = "@defichain/jellyfish-wallet-mnemonic";
 
-    os_perso_derive_node_with_seed_key(HDW_NORMAL,
+            os_perso_derive_node_with_seed_key(HDW_NORMAL,
                                        CX_CURVE_256K1,
                                        (uint32_t *) bip32_path,
                                        bip32_path_len,
