@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/p3root/ledger-app-defichain/speculos-defichain:latest
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
     steps:
       - name: Clone
@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/p3root/ledger-app-defichain/speculos-defichain:latest
+      image: ghcr.io/ledgerhq/ledger-app-builder/ledger-app-builder:latest
 
     steps:
       - name: Clone
