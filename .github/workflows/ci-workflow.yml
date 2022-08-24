@@ -36,22 +36,22 @@ jobs:
 
       - name: Build
         run: |
-          make DEBUG=0 COIN=bitcoin BOLOS_SDK=${{ matrix.SDK }} && mv bin/ bitcoin-bin/
+          make DEBUG=0 COIN=defichain BOLOS_SDK=${{ matrix.SDK }} && mv bin/ defichain-bin/
           make clean
-          make DEBUG=0 COIN=bitcoin_testnet BOLOS_SDK=${{ matrix.SDK }} && mv bin/ bitcoin-testnet-bin/
+          make DEBUG=0 COIN=defichain_testnet BOLOS_SDK=${{ matrix.SDK }} && mv bin/ defichain-testnet-bin/
           make clean
-          make DEBUG=0 COIN=bitcoin_testnet_lib BOLOS_SDK=${{ matrix.SDK }} && mv bin/ bitcoin-testnet-lib-bin/
-      - name: Upload Bitcoin app binary
+          make DEBUG=0 COIN=defichain_testnet_lib BOLOS_SDK=${{ matrix.SDK }} && mv bin/ defichain-testnet-lib-bin/
+      - name: Upload defichain app binary
         uses: actions/upload-artifact@v2
         with:
-          name: bitcoin-app-${{ matrix.model }}
-          path: bitcoin-bin
+          name: defichain-app-${{ matrix.model }}
+          path: defichain-bin
 
-      - name: Upload Bitcoin Testnet app binary
+      - name: Upload DeFiChain Testnet app binary
         uses: actions/upload-artifact@v2
         with:
-          name: bitcoin-testnet-app-${{ matrix.model }}
-          path: bitcoin-testnet-bin
+          name: defichain-testnet-app-${{ matrix.model }}
+          path: defichain-testnet-bin
 
       - name: Upload Bitcoin Testnet app binary (lib version)
         uses: actions/upload-artifact@v2
@@ -222,7 +222,7 @@ jobs:
       - name: Download Bitcoin Testnet app binary
         uses: actions/download-artifact@v2
         with:
-          name: bitcoin-testnet-app-nanos
+          name: defichain-testnet-app-nanos
           path: bin
 
       - name: Run tests
@@ -254,7 +254,7 @@ jobs:
       - name: Download Bitcoin Testnet app binary
         uses: actions/download-artifact@v2
         with:
-          name: bitcoin-testnet-app-nanos
+          name: defichain-testnet-app-nanos
           path: tests-legacy/bitcoin-testnet-bin
 
       - name: Run tests
@@ -287,14 +287,14 @@ jobs:
       - name: Download Bitcoin app binary
         uses: actions/download-artifact@v2
         with:
-          name: bitcoin-app-nanos
-          path: tests-legacy/bitcoin-bin
+          name: defichain-app-nanos
+          path: tests-legacy/defichain-bin
 
       - name: Download Bitcoin Testnet app binary (library version)
         uses: actions/download-artifact@v2
         with:
-          name: bitcoin-testnet-lib-app-nanos
-          path: tests-legacy/bitcoin-testnet-bin
+          name: defichain-testnet-lib-app-nanos
+          path: tests-legacy/defichain-testnet-bin
 
 
       - name: Run tests
