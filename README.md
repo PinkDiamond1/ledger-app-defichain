@@ -1,4 +1,6 @@
-# Ledger Bitcoin Application
+# Ledger DeFiChain Application
+This is a fork from the official bitcoin-app-new repository. Just added some specific DeFiChain code!
+
 
 ## Prerequisite
 
