@@ -358,7 +358,7 @@ void crypto_derive_symmetric_key(const char *label, size_t label_len, uint8_t ke
                                        label_len,
                                        key,
                                        NULL,
-                                       (unsigned char*)seedKey,
+                                       (unsigned char*) seedKey,
                                        36);
 #else
     os_perso_derive_node_with_seed_key(HDW_SLIP21,
