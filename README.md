@@ -58,3 +58,15 @@ It outputs 4 artifacts:
 - `bitcoin-app-debug` within output files of the compilation process in debug mode
 - `code-coverage` within HTML details of code coverage
 - `documentation` within HTML auto-generated documentation
+
+
+
+TOOLS:
+load
+BOLOS_SDK=$NANOS_SDK make load
+sudo docker run --rm -ti -v "/dev/bus/usb:/dev/bus/usb" -v "$(realpath .):/app" --privileged ledger-app-builder:latest
+
+
+BUILD:
+sudo docker run --rm -ti -v "$(realpath .):/app" ledger-app-builder:latest
+BOLOS_SDK=$NANOS_SDK COIN=defichain_testnet DEBUG=1 make

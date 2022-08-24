@@ -143,6 +143,24 @@ unsigned long int transaction_get_varint(void) {
     }
 }
 
+unsigned long int transaction_get_varint_from_buffer(unsigned char *buffer, int bufferLength) {
+    unsigned char firstByte = buffer[0];
+    
+    if (firstByte < 0xFD) {
+        return firstByte;
+    } else if (firstByte == 0xFD && bufferLength >= 2) {
+        unsigned long int result = (unsigned long int)(buffer[0]) | ((unsigned long int)(buffer[1]) << 8);
+        return result;
+    } else if (firstByte == 0xFE && bufferLength >= 4) {
+        unsigned long int result = btchip_read_u32(buffer, 0, 0);
+        return result;
+    } else {
+        PRINTF("Varint parsing failed\n");
+        THROW(INVALID_PARAMETER);
+        return 0;
+    }
+}
+
 void transaction_parse(unsigned char parseMode) {
     unsigned char optionP2SHSkip2FA =
         ((N_btchip.bkp.config.options & BTCHIP_OPTION_SKIP_2FA_P2SH) != 0);
@@ -441,8 +459,6 @@ void transaction_parse(unsigned char parseMode) {
                                     PRINTF("Overflow\n");
                                     goto fail;
                                 }
-                                PRINTF("Adding amount\n%.*H\n",8,btchip_context_D.transactionBufferPointer);
-                                PRINTF("New amount\n%.*H\n",8,btchip_context_D.transactionContext.transactionAmount);
                                 transaction_offset_increase(8);
                             } else {
                                 btchip_context_D.transactionHashOption =
@@ -811,8 +827,17 @@ void transaction_parse(unsigned char parseMode) {
                       }
                     }
                     */
+
                     if (btchip_context_D.transactionDataRemaining < 1) {
                         // No more data to read, ok
+
+                        int txVersion = transaction_get_varint_from_buffer(btchip_context_D.transactionVersion, 4);
+                        PRINTF("txversion is %i\n", txVersion);
+                        if(txVersion > 3) {
+                            //read tokenId for tx version >= 4
+                            transaction_get_varint();
+                        }
+
                         goto ok;
                     }
                     if (btchip_context_D.transactionContext.scriptRemaining ==
@@ -836,6 +861,7 @@ void transaction_parse(unsigned char parseMode) {
                     if (dataAvailable == 0) {
                         goto ok;
                     }
+
                     transaction_offset_increase(dataAvailable);
                     btchip_context_D.transactionContext.scriptRemaining -=
                         dataAvailable;

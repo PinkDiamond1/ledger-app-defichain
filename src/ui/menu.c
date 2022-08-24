@@ -125,7 +125,7 @@ void ui_menu_main() {
     }
 }
 
-UX_STEP_NOCB(ux_menu_info_step, bn, {"Bitcoin App", "(c) 2022 Ledger"});
+UX_STEP_NOCB(ux_menu_info_step, bn, {"DeFiChain App", "(c) 2022 p3root"});
 UX_STEP_CB(ux_menu_back_step, pb, ui_menu_main(), {&C_icon_back, "Back"});
 
 // FLOW for the about submenu:
@@ -134,5 +134,6 @@ UX_STEP_CB(ux_menu_back_step, pb, ui_menu_main(), {&C_icon_back, "Back"});
 UX_FLOW(ux_menu_about_flow, &ux_menu_info_step, &ux_menu_back_step, FLOW_LOOP);
 
 void ui_menu_about() {
+    PRINTF("Info screen opened!\n");
     ux_flow_init(0, ux_menu_about_flow, NULL);
 }

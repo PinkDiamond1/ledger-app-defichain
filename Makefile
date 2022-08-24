@@ -26,7 +26,7 @@ include $(BOLOS_SDK)/Makefile.defines
 APP_LOAD_PARAMS  = $(COMMON_LOAD_PARAMS)
 APP_PATH = ""
 
-APPVERSION_M = 0
+APPVERSION_M = 2
 APPVERSION_N = 0
 APPVERSION_P = 1
 APPVERSION   = "$(APPVERSION_M).$(APPVERSION_N).$(APPVERSION_P)"
@@ -38,6 +38,8 @@ APP_STACK_SIZE = 1500
 ifndef COIN
 COIN=bitcoin_testnet
 endif
+
+$(info Build for coin $(COIN))
 
 # Custom NanoS linking script to overlap legacy globals and new globals
 ifeq ($(TARGET_NAME),TARGET_NANOS)
@@ -752,12 +754,14 @@ ifeq ($(DEBUG),0)
 else
         ifeq ($(DEBUG),10)
                 $(warning Using semihosted PRINTF. Only run with speculos!)
-                DEFINES   += HAVE_PRINTF HAVE_SEMIHOSTED_PRINTF PRINTF=semihosted_printf
+                DEFINES   += HAVE_SPRINTF HAVE_PRINTF HAVE_SEMIHOSTED_PRINTF PRINTF=semihosted_printf
         else
                 ifeq ($(TARGET_NAME),TARGET_NANOS)
-                        DEFINES   += HAVE_PRINTF PRINTF=screen_printf
+                        DEFINES   += HAVE_SPRINTF HAVE_PRINTF PRINTF=screen_printf
+                        $(info Using SCREEN_PRINTF)
                 else
-                        DEFINES   += HAVE_PRINTF PRINTF=mcu_usb_printf
+                        DEFINES   += HAVE_SPRINTF HAVE_PRINTF PRINTF=mcu_usb_printf
+                        $(info Using USB_PRINTF)
                 endif
         endif
 endif
