@@ -40,7 +40,7 @@ jobs:
           make clean
           make DEBUG=0 COIN=defichain_testnet BOLOS_SDK=${{ matrix.SDK }} && mv bin/ defichain-testnet-bin/
           make clean
-          make DEBUG=0 COIN=bitcoin_testnet_lib BOLOS_SDK=${{ matrix.SDK }} && mv bin/ defichain-testnet-lib-bin/
+          make DEBUG=0 COIN=defichain_testnet_lib BOLOS_SDK=${{ matrix.SDK }} && mv bin/ defichain-testnet-lib-bin/
       - name: Upload defichain app binary
         uses: actions/upload-artifact@v2
         with:
@@ -53,11 +53,11 @@ jobs:
           name: defichain-testnet-app-${{ matrix.model }}
           path: defichain-testnet-bin
 
-      - name: Upload Bitcoin Testnet app binary (lib version)
+      - name: Upload DeFiChain Testnet app binary (lib version)
         uses: actions/upload-artifact@v2
         with:
-          name: bitcoin-testnet-lib-app-${{ matrix.model }}
-          path: bitcoin-testnet-lib-bin
+          name: defichain-testnet-lib-app-${{ matrix.model }}
+          path: defichain-testnet-lib-bin
 
   job_unit_test:
     name: Unit test
@@ -94,7 +94,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./unit-tests/coverage.info
           flags: unittests
-          name: codecov-app-bitcoin
+          name: codecov-app-defichain
           fail_ci_if_error: true
           verbose: true
       
@@ -178,10 +178,10 @@ jobs:
       - name: Clone
         uses: actions/checkout@v2
 
-      - name: Download Bitcoin app binary
+      - name: Download DeFiChain app binary
         uses: actions/download-artifact@v2
         with:
-          name: bitcoin-app-${{matrix.model}}
+          name: defichain-app-${{matrix.model}}
           path: bin
 
       - name: Run tests
@@ -219,7 +219,7 @@ jobs:
         run: |
           npm install -g yarn
 
-      - name: Download Bitcoin Testnet app binary
+      - name: Download DeFiChain Testnet app binary
         uses: actions/download-artifact@v2
         with:
           name: defichain-testnet-app-nanos
@@ -251,11 +251,11 @@ jobs:
       - name: Clone
         uses: actions/checkout@v2
 
-      - name: Download Bitcoin Testnet app binary
+      - name: Download DeFiChain Testnet app binary
         uses: actions/download-artifact@v2
         with:
           name: defichain-testnet-app-nanos
-          path: tests-legacy/bitcoin-testnet-bin
+          path: tests-legacy/defichain-testnet-bin
 
       - name: Run tests
         run: |
@@ -284,13 +284,13 @@ jobs:
       - name: Clone
         uses: actions/checkout@v2
 
-      - name: Download Bitcoin app binary
+      - name: Download DeFiChain app binary
         uses: actions/download-artifact@v2
         with:
           name: defichain-app-nanos
           path: tests-legacy/defichain-bin
 
-      - name: Download Bitcoin Testnet app binary (library version)
+      - name: Download DeFiChain Testnet app binary (library version)
         uses: actions/download-artifact@v2
         with:
           name: defichain-testnet-lib-app-nanos
