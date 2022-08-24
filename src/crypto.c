@@ -105,7 +105,7 @@ int crypto_derive_private_key(cx_ecfp_private_key_t *private_key,
                                                bip32_path_len,
                                                raw_private_key,
                                                chain_code,
-                                               (unsigned char *)seedKey,
+                                               (unsigned char *) seedKey,
                                                36);
 #else
             os_perso_derive_node_bip32(CX_CURVE_256K1,
