@@ -20,11 +20,11 @@ jobs:
     - name: Clone
       uses: actions/checkout@v2
 
-    - name: Build and push speculos-bitcoin to GitHub Packages
+    - name: Build and push speculos-defichain to GitHub Packages
       uses: docker/build-push-action@v1
       with:
         dockerfile: .github/workflows/Dockerfile
-        repository: ledgerhq/app-bitcoin-new/speculos-bitcoin
+        repository: p3root/ledger-app-defichain/speculos-defichain
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
