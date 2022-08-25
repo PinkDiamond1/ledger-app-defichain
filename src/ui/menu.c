@@ -124,7 +124,7 @@ void ui_menu_main() {
     }
 }
 
-UX_STEP_NOCB(ux_menu_info_step, bn, {"DeFiChain App", "(c) 2022 p3root"});
+UX_STEP_NOCB(ux_menu_info_step, bn, {"DeFiChain App", "(c) 2022 p3root & Jellywallet"});
 UX_STEP_CB(ux_menu_back_step, pb, ui_menu_main(), {&C_icon_back, "Back"});
 
 // FLOW for the about submenu:
