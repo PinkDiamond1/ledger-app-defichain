@@ -24,7 +24,7 @@ jobs:
       uses: docker/build-push-action@v1
       with:
         dockerfile: .github/workflows/Dockerfile
-        repository: Jellywallet/ledger-app-defichain/speculos-defichain
+        repository: jellywallet/ledger-app-defichain/speculos-defichain
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
