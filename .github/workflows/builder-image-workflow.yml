@@ -1,4 +1,4 @@
-name: Build Custom speculos-defichain image
+name: Build custom speculos-defichain image
 
 on:
   push:
