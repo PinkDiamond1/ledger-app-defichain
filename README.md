@@ -11,13 +11,13 @@ If you want to benefit from [vscode](https://code.visualstudio.com/) integration
 ```
 BOLOS_ENV=/opt/bolos-devenv
 ```
-
+ 
 and do the same with `BOLOS_SDK` environment variable
 
 ```
 BOLOS_SDK=/opt/nanos-secure-sdk
 ```
-  
+   
 ## Compilation
 
 ```
