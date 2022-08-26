@@ -1,4 +1,4 @@
 #!/bin/bash
 
-rm -rf bitcoin-bin
-rm -rf bitcoin-testnet-bin
+rm -rf defichain-bin
+rm -rf defichain-testnet-bin

@@ -19,10 +19,10 @@ random.seed(0)  # make sure tests are repeatable
 
 # Make sure that the native client library is used with, as speculos would otherwise
 # return a version number < 2.0.0 for the app
-os.environ['SPECULOS_APPNAME'] = f'Bitcoin Test:{get_app_version()}'
+os.environ['SPECULOS_APPNAME'] = f'DeFiChain Test:{get_app_version()}'
 
 
-BITCOIN_DIRNAME = os.getenv("BITCOIN_DIRNAME", ".test_bitcoin")
+DEFICHAIN_DIRNAME = os.getenv("DEFICHAIN_DIRNAME", ".test_bitcoin")
 
 
 rpc_url = "http://%s:%s@%s:%s" % (
@@ -68,12 +68,12 @@ def setup_node():
 @pytest.fixture(scope="session")
 def run_bitcoind():
     # Run bitcoind in a separate folder
-    os.makedirs(BITCOIN_DIRNAME, exist_ok=True)
+    os.makedirs(DEFICHAIN_DIRNAME, exist_ok=True)
 
-    bitcoind = os.getenv("BITCOIND", "bitcoind")
+    bitcoind = os.getenv("defid", "defid")
 
-    shutil.copy(os.path.join(os.path.dirname(__file__), "bitcoin.conf"), BITCOIN_DIRNAME)
-    subprocess.Popen([bitcoind, f"--datadir={BITCOIN_DIRNAME}"])
+    shutil.copy(os.path.join(os.path.dirname(__file__), "bitcoin.conf"), DEFICHAIN_DIRNAME)
+    subprocess.Popen([bitcoind, f"--datadir={DEFICHAIN_DIRNAME}"])
 
     # Make sure the node is ready, and generate some initial blocks
     setup_node()
@@ -83,7 +83,7 @@ def run_bitcoind():
     rpc = get_rpc()
     rpc.stop()
 
-    shutil.rmtree(BITCOIN_DIRNAME)
+    shutil.rmtree(DEFICHAIN_DIRNAME)
 
 
 @pytest.fixture(scope="session")

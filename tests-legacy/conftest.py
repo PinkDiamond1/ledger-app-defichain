@@ -34,7 +34,7 @@ def device(request, hid):
     # or hopes that "speculos.py" is in the $PATH if not set
     speculos_executable = os.environ.get("SPECULOS", "speculos.py")
 
-    lib_path = "./bitcoin-bin/app.elf"
+    lib_path = "./defichain-bin/app.elf"
     if os.path.isfile(lib_path):
         print("Bitcoin app running with library")
         lib_arg = ["-l", f"Bitcoin:{lib_path}"]
@@ -43,7 +43,7 @@ def device(request, hid):
         lib_arg = []
 
     base_args = [
-        speculos_executable, "./bitcoin-testnet-bin/app.elf",
+        speculos_executable, "./defichain-testnet-bin/app.elf",
         *lib_arg,
         "--sdk", "2.0",
         "--display", "headless"

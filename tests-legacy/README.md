@@ -1,4 +1,4 @@
-# End-to-end tests using Bitcoin Testnet
+# End-to-end tests using DeFiChain Testnet
 
 These tests are implemented in Python and can be executed either using the [Speculos](https://github.com/LedgerHQ/speculos) emulator or a Ledger Nano S/X.
 
@@ -12,7 +12,7 @@ pip install -r requirements.txt
 
 ## Launch with Speculos
 
-In order to create the necessary binaries for the Bitcoin Testnet application, you can use the convenience scripts `prepare_tests_lib.sh` and `prepare_tests_native.sh`. The former compiles the Bitcoin mainnet version of the application to use as a library, then compiles the binary for the Bitcoin testnet version using the library (this is the mechanism used for the altcoins applications based on the legacy Bitcoin app). The latter natively compiles the Bitcoin application for testnet.
+In order to create the necessary binaries for the DeFiChain Testnet application, you can use the convenience scripts `prepare_tests_lib.sh` and `prepare_tests_native.sh`. The former compiles the DeFiChain mainnet version of the application to use as a library, then compiles the binary for the DeFiChain testnet version using the library (this is the mechanism used for the altcoins applications based on the legacy DeFiChain app). The latter natively compiles the DeFiChain application for testnet.
 
 ```
 bash ./prepare_tests_lib.sh   # or bash ./prepare_tests_native.sh

@@ -5,10 +5,10 @@ FROM ghcr.io/ledgerhq/speculos:latest
 # install curl
 RUN apt update -y && apt install -y curl
 
-# download bitcoin-core and decompress it to /bitcoin
-RUN curl -o /tmp/bitcoin.tar.gz https://bitcoin.org/bin/bitcoin-core-22.0/bitcoin-22.0-x86_64-linux-gnu.tar.gz && \
-    tar -xf /tmp/bitcoin.tar.gz -C / && \
-    mv /bitcoin-22.0 /bitcoin
+# download defichain-core and decompress it to /defichain
+RUN curl -o /tmp/defichain.tar.gz https://github.com/DeFiCh/ain/releases/download/v2.9.4/defichain-2.9.4-x86_64-pc-linux-gnu.tar.gz && \
+    tar -xf /tmp/defichain.tar.gz -C / && \
+    mv /defichain-22.0 /defichain
 
 # Add bitcoin binaries to path
-ENV PATH=/bitcoin/bin:$PATH
+ENV PATH=/defichain/bin:$PATH
