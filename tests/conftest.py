@@ -72,7 +72,7 @@ def run_bitcoind():
 
     bitcoind = os.getenv("defid", "defid")
 
-    shutil.copy(os.path.join(os.path.dirname(__file__), "bitcoin.conf"), DEFICHAIN_DIRNAME)
+    shutil.copy(os.path.join(os.path.dirname(__file__), "defichain.conf"), DEFICHAIN_DIRNAME)
     subprocess.Popen([bitcoind, f"--datadir={DEFICHAIN_DIRNAME}"])
 
     # Make sure the node is ready, and generate some initial blocks
