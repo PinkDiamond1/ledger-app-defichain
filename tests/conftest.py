@@ -26,10 +26,10 @@ DEFICHAIN_DIRNAME = os.getenv("DEFICHAIN_DIRNAME", ".test_bitcoin")
 
 
 rpc_url = "http://%s:%s@%s:%s" % (
-    os.getenv("BTC_RPC_USER", "user"),
-    os.getenv("BTC_RPC_PASSWORD", "passwd"),
-    os.getenv("BTC_RPC_HOST", "127.0.0.1"),
-    os.getenv("BTC_RPC_PORT", "18443")
+    os.getenv("DFI_RPC_USER", "user"),
+    os.getenv("DFI_RPC_PASSWORD", "passwd"),
+    os.getenv("DFI_RPC_HOST", "127.0.0.1"),
+    os.getenv("DFI_RPC_PORT", "18443")
 )
 
 utxos = list()
@@ -45,14 +45,14 @@ def get_wallet_rpc(wallet_name: str) -> AuthServiceProxy:
 
 
 def setup_node():
-    global btc_addr
+    global dfi_addr
 
     # Check bitcoind is running while generating the address
     while True:
         rpc = get_rpc()
         try:
-            print(rpc.createwallet(wallet_name="test_wallet", descriptors=True))
-            btc_addr = rpc.getnewaddress()
+            print(rpc.createwallet(wallet_name="test_wallet", createwallet="", descriptors=True))
+            dfi_addr = rpc.getnewaddress()
             break
 
         except ConnectionError as e:
@@ -60,20 +60,26 @@ def setup_node():
         except JSONRPCException as e:
             if "Loading wallet..." in str(e):
                 sleep(1)
+            print(e);
 
+    print("wallet setup...")
     # Mine enough blocks so coinbases are mature and we have enough funds to run everything
-    rpc.generatetoaddress(105, btc_addr)
+    rpc.generatetoaddress(105, dfi_addr)
 
 
 @pytest.fixture(scope="session")
-def run_bitcoind():
-    # Run bitcoind in a separate folder
+def run_defid():
+    # Run defid in a separate folder
     os.makedirs(DEFICHAIN_DIRNAME, exist_ok=True)
 
-    bitcoind = os.getenv("defid", "defid")
+    defid = os.getenv("defid", "defid")
 
-    shutil.copy(os.path.join(os.path.dirname(__file__), "defichain.conf"), DEFICHAIN_DIRNAME)
-    subprocess.Popen([bitcoind, f"--datadir={DEFICHAIN_DIRNAME}"])
+    print(os.getenv("PATH"))
+
+    print("starting defid")
+    shutil.copy(os.path.join(os.path.dirname(__file__), "defi.conf"), DEFICHAIN_DIRNAME)
+    subprocess.Popen([defid, f"--datadir={DEFICHAIN_DIRNAME}", f"-txindex", "-regtest", "-printtoconsole"])
+    print("started defid")
 
     # Make sure the node is ready, and generate some initial blocks
     setup_node()
@@ -87,12 +93,12 @@ def run_bitcoind():
 
 
 @pytest.fixture(scope="session")
-def rpc(run_bitcoind):
+def rpc(run_defid):
     return get_rpc()
 
 
 @pytest.fixture(scope="session")
-def rpc_test_wallet(run_bitcoind):
+def rpc_test_wallet(run_defid):
     return get_wallet_rpc("test_wallet")
 
 

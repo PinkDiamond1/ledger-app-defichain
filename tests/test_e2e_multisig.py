@@ -21,7 +21,7 @@ from .conftest import create_new_wallet, generate_blocks, get_unique_wallet_name
 
 def extract_our_pubkeys(psbt: PSBT, master_fp: bytes) -> Dict[int, bytes]:
     # It only works for standard wallets and simple multisig; won't generalize to miniscript
-    # based on code in bitcoin-core/HWI
+    # based on code in defichain-core/HWI
 
     psbt2 = PSBT()
     psbt2.deserialize(psbt.serialize())
