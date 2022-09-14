@@ -16,8 +16,8 @@ def test_get_wallet_address_singlesig_legacy(client: Client):
             f"[f5acc2fd/44'/1'/0']tpubDCwYjpDhUdPGP5rS3wgNg13mTrrjBuG8V9VpWbyptX6TRPbNoZVXsoVUSkCjmQ8jJycjuDKBb9eataSymXakTTaGifxR6kmVsfFehH1ZgJT/**",
         ],
     )
-    print(client.get_wallet_address(wallet, None, 0,  0, False)
-    print(client.get_wallet_address(wallet, None, 1,  15, False)
+    print(client.get_wallet_address(wallet, None, 0,  0, False))
+    print(client.get_wallet_address(wallet, None, 1,  15, False))
     assert client.get_wallet_address(wallet, None, 0,  0, False) == "mz5vLWdM1wHVGSmXUkhKVvZbJ2g4epMXSm"
     assert client.get_wallet_address(wallet, None, 1, 15, False) == "myFCUBRCKFjV7292HnZtiHqMzzHrApobpT"
 
