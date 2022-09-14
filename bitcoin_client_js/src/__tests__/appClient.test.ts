@@ -13,7 +13,7 @@ import { listen } from "@ledgerhq/logs";
 import type { Log } from "@ledgerhq/logs";
 
 
-import { AppClient } from ".."
+import { AppClient, DefaultWalletPolicy, PsbtV2, WalletPolicy } from ".."
 
 jest.setTimeout(10000);
 
@@ -54,23 +54,21 @@ async function openSpeculosAndWait(opts: SpeculosHttpTransportOpts = {}): Promis
 // Convenience method to send the kill signal and wait for the process to completely terminate
 async function killProcess(proc: ChildProcessWithoutNullStreams, signal: NodeJS.Signals = 'SIGTERM', timeout = 10000) {
   return new Promise<void>((resolve, reject) => {
-    if (process.env.START_SPECULOS) {
-      const pid = proc.pid;
-      process.kill(pid, signal);
-      let count = 0;
-      const intervalHandler = setInterval(() => {
-        try {
-          process.kill(pid, signal);
-        } catch (e) {
-          clearInterval(intervalHandler);
-          resolve();
-        }
-        if ((count += 100) > timeout) {
-          clearInterval(intervalHandler);
-          reject(new Error("Timeout process kill"))
-        }
-      }, 100)
-    }
+    const pid = proc.pid;
+    process.kill(pid, signal);
+    let count = 0;
+    const intervalHandler = setInterval(() => {
+      try {
+        process.kill(pid, signal);
+      } catch (e) {
+        clearInterval(intervalHandler);
+        resolve();
+      }
+      if ((count += 100) > timeout) {
+        clearInterval(intervalHandler);
+        reject(new Error("Timeout process kill"))
+      }
+    }, 100)
   });
 }
 
@@ -103,28 +101,26 @@ describe("test AppClient", () => {
   });
 
   beforeEach(async () => {
-    if (process.env.START_SPECULOS) {
-      sp = spawn(speculos_path, [
-        repoRootPath + "/bin/app.elf",
-        '-k', '2.1',
-        '--display', 'headless'
-      ],
-        {
-          cwd: speculos_directory
-        });
-
-      sp.stdout.on('data', function (data) {
-        if (process.env.LOG_SPECULOS) {
-          console.log('stdout: ' + data);
-        }
+    sp = spawn(speculos_path, [
+      repoRootPath + "/bin/app.elf",
+      '-k', '2.1',
+      '--display', 'headless'
+    ],
+      {
+        cwd: speculos_directory
       });
 
-      sp.stderr.on('data', function (data) {
-        if (process.env.LOG_SPECULOS) {
-          console.log('stderr: ' + data);
-        }
-      });
-    }
+    sp.stdout.on('data', function (data) {
+      if (process.env.LOG_SPECULOS) {
+        console.log('stdout: ' + data);
+      }
+    });
+
+    sp.stderr.on('data', function (data) {
+      if (process.env.LOG_SPECULOS) {
+        console.log('stderr: ' + data);
+      }
+    });
 
     transport = await openSpeculosAndWait();
     app = new AppClient(transport);
@@ -138,15 +134,14 @@ describe("test AppClient", () => {
 
   it("can retrieve the master fingerprint", async () => {
     const result = await app.getMasterFingerprint();
-    expect(result).toEqual("90e4d85e");
+    expect(result).toEqual("1fedcf9d");
   });
 
   it("can get an extended pubkey", async () => {
-    const result = await app.getExtendedPubkey("m/1129/0/0/0", false);
+    const result = await app.getExtendedPubkey("m/49'/1'/1'/1/3", false);
 
-    expect(result).toEqual("tpubDEMJ9xXFMoxkYnqsJz3L6TgRmQZjyqu3qHfsaC9rGVkjB7Dc6qP15RBNLLjTkeGbNgVsqHwzXQF368ZtVTaN1TZnK3un2Ary5c1X3cGHvME")
+    expect(result).toEqual("tpubDGxD6st7AMzj6YGzCYzscMw3Rkbwfbgqujm7sqGFgD2Y633QDsNSYUH147LpqCBkn98oTdy6BR2UqH6SDfigDC2qFJVr1cka8CM7Ahvj4nG")
   });
-
 
   it("can sign a message", async () => {
     const msg = "The root problem with conventional currency is all the trust that's required to make it work. The central bank must be trusted not to debase the currency, but the history of fiat currencies is full of breaches of that trust. Banks must be trusted to hold our money and transfer it electronically, but they lend it out in waves of credit bubbles with barely a fraction in reserve. We have to trust them with our privacy, trust them not to let identity thieves drain our accounts. Their massive overhead costs make micropayments impossible.";
@@ -156,6 +151,6 @@ describe("test AppClient", () => {
     await setSpeculosAutomation(transport, automation);
 
     const result = await app.signMessage(Buffer.from(msg, "ascii"), path)
-    expect(result).toEqual("IAjCoEQQpz0boN4hA8SKVjDPXUEbs6QCau1yB+e33j4vOW3ftRDPG246MsGlsNUXocAc4Nm5FMfC8HLq20GDTjE=");
+    expect(result).toEqual("H/UdRAW0qG199HMeweMYFFOgS7ggmNNqwV7HHTYhq6YLb6EiLHJNmBIy0hz06l3GFqxXgNGkk9EU6/Wlpt/RhfU=");
   });
 });
