@@ -75,12 +75,12 @@ async function killProcess(proc: ChildProcessWithoutNullStreams, signal: NodeJS.
 // TODO: It would be better to add this in SpeculosTransport, or create a new custom class.
 async function setSpeculosAutomation(transport: SpeculosTransport, automationObj: any): Promise<void> {
   return new Promise((resolve, reject) => {
-      transport.instance
-        .post(`/automation`, automationObj)
-        .then((response) => {
-          resolve(response.data);
-        }, reject);
-    });
+    transport.instance
+      .post(`/automation`, automationObj)
+      .then((response) => {
+        resolve(response.data);
+      }, reject);
+  });
 }
 
 
@@ -105,14 +105,14 @@ describe("test AppClient", () => {
       '-k', '2.1',
       '--display', 'headless'
     ]);
-    
-    sp.stdout.on('data', function(data) {
+
+    sp.stdout.on('data', function (data) {
       if (process.env.LOG_SPECULOS) {
         console.log('stdout: ' + data);
       }
     });
 
-    sp.stderr.on('data', function(data) {
+    sp.stderr.on('data', function (data) {
       if (process.env.LOG_SPECULOS) {
         console.log('stderr: ' + data);
       }
@@ -130,11 +130,12 @@ describe("test AppClient", () => {
 
   it("can retrieve the master fingerprint", async () => {
     const result = await app.getMasterFingerprint();
-    expect(result).toEqual("f5acc2fd");
+    expect(result).toEqual("1fedcf9d");
   });
 
   it("can get an extended pubkey", async () => {
     const result = await app.getExtendedPubkey("m/49'/1'/1'/1/3", false);
+    console.log(result)
 
     expect(result).toEqual("tpubDGnetmJDCL18TyaaoyRAYbkSE9wbHktSdTS4mfsR6inC8c2r6TjdBt3wkqEQhHYPtXpa46xpxDaCXU2PRNUGVvDzAHPG6hHRavYbwAGfnFr")
   });
@@ -147,90 +148,92 @@ describe("test AppClient", () => {
       expResult: string,
       walletHmac?: Buffer
     }[] = [
-      // legacy
-      {
-        policy: new DefaultWalletPolicy("pkh(@0)", "[f5acc2fd/44'/1'/0']tpubDCwYjpDhUdPGP5rS3wgNg13mTrrjBuG8V9VpWbyptX6TRPbNoZVXsoVUSkCjmQ8jJycjuDKBb9eataSymXakTTaGifxR6kmVsfFehH1ZgJT/**"),
-        change: 0,
-        addrIndex: 0,
-        expResult: "mz5vLWdM1wHVGSmXUkhKVvZbJ2g4epMXSm",
-      },
-      {
-        policy: new DefaultWalletPolicy("pkh(@0)", "[f5acc2fd/44'/1'/0']tpubDCwYjpDhUdPGP5rS3wgNg13mTrrjBuG8V9VpWbyptX6TRPbNoZVXsoVUSkCjmQ8jJycjuDKBb9eataSymXakTTaGifxR6kmVsfFehH1ZgJT/**"),
-        change: 1,
-        addrIndex: 15,
-        expResult: "myFCUBRCKFjV7292HnZtiHqMzzHrApobpT",
-      },
-      // native segwit
-      {
-        policy: new DefaultWalletPolicy("wpkh(@0)", "[f5acc2fd/84'/1'/0']tpubDCtKfsNyRhULjZ9XMS4VKKtVcPdVDi8MKUbcSD9MJDyjRu1A2ND5MiipozyyspBT9bg8upEp7a8EAgFxNxXn1d7QkdbL52Ty5jiSLcxPt1P/**"),
-        change: 0,
-        addrIndex: 0,
-        expResult: "tb1qzdr7s2sr0dwmkwx033r4nujzk86u0cy6fmzfjk",
-      },
-      {
-        policy: new DefaultWalletPolicy("wpkh(@0)", "[f5acc2fd/84'/1'/0']tpubDCtKfsNyRhULjZ9XMS4VKKtVcPdVDi8MKUbcSD9MJDyjRu1A2ND5MiipozyyspBT9bg8upEp7a8EAgFxNxXn1d7QkdbL52Ty5jiSLcxPt1P/**"),
-        change: 1,
-        addrIndex: 15,
-        expResult: "tb1qlrvzyx8jcjfj2xuy69du9trtxnsvjuped7e289",
-      },
-      // wrapped segwit
-      {
-        policy: new DefaultWalletPolicy("sh(wpkh(@0))", "[f5acc2fd/49'/1'/0']tpubDC871vGLAiKPcwAw22EjhKVLk5L98UGXBEcGR8gpcigLQVDDfgcYW24QBEyTHTSFEjgJgbaHU8CdRi9vmG4cPm1kPLmZhJEP17FMBdNheh3/**"),
-        change: 0,
-        addrIndex: 0,
-        expResult: "2MyHkbusvLomaarGYMqyq7q9pSBYJRwWcsw",
-      },
-      {
-        policy: new DefaultWalletPolicy("sh(wpkh(@0))", "[f5acc2fd/49'/1'/0']tpubDC871vGLAiKPcwAw22EjhKVLk5L98UGXBEcGR8gpcigLQVDDfgcYW24QBEyTHTSFEjgJgbaHU8CdRi9vmG4cPm1kPLmZhJEP17FMBdNheh3/**"),
-        change: 1,
-        addrIndex: 15,
-        expResult: "2NAbM4FSeBQG4o85kbXw2YNfKypcnEZS9MR",
-      },
-      // taproot
-      {
-        policy: new DefaultWalletPolicy("tr(@0)", "[f5acc2fd/86'/1'/0']tpubDDKYE6BREvDsSWMazgHoyQWiJwYaDDYPbCFjYxN3HFXJP5fokeiK4hwK5tTLBNEDBwrDXn8cQ4v9b2xdW62Xr5yxoQdMu1v6c7UDXYVH27U/**"),
-        change: 0,
-        addrIndex: 0,
-        expResult: "tb1pws8wvnj99ca6acf8kq7pjk7vyxknah0d9mexckh5s0vu2ccy68js9am6u7",
-      },
-      {
-        policy: new DefaultWalletPolicy("tr(@0)", "[f5acc2fd/86'/1'/0']tpubDDKYE6BREvDsSWMazgHoyQWiJwYaDDYPbCFjYxN3HFXJP5fokeiK4hwK5tTLBNEDBwrDXn8cQ4v9b2xdW62Xr5yxoQdMu1v6c7UDXYVH27U/**"),
-        change: 0,
-        addrIndex: 9,
-        expResult: "tb1psl7eyk2jyjzq6evqvan854fts7a5j65rth25yqahkd2a765yvj0qggs5ne",
-      },
-      {
-        policy: new DefaultWalletPolicy("tr(@0)", "[f5acc2fd/86'/1'/0']tpubDDKYE6BREvDsSWMazgHoyQWiJwYaDDYPbCFjYxN3HFXJP5fokeiK4hwK5tTLBNEDBwrDXn8cQ4v9b2xdW62Xr5yxoQdMu1v6c7UDXYVH27U/**"),
-        change: 1,
-        addrIndex: 0,
-        expResult: "tb1pmr60r5vfjmdkrwcu4a2z8h39mzs7a6wf2rfhuml6qgcp940x9cxs7t9pdy",
-      },
-      {
-        policy: new DefaultWalletPolicy("tr(@0)", "[f5acc2fd/86'/1'/0']tpubDDKYE6BREvDsSWMazgHoyQWiJwYaDDYPbCFjYxN3HFXJP5fokeiK4hwK5tTLBNEDBwrDXn8cQ4v9b2xdW62Xr5yxoQdMu1v6c7UDXYVH27U/**"),
-        change: 1,
-        addrIndex: 9,
-        expResult: "tb1p98d6s9jkf0la8ras4nnm72zme5r03fexn29e3pgz4qksdy84ndpqgjak72",
-      },
-      // multisig
-      {
-        policy: new WalletPolicy(
-          "Cold storage",
-          "wsh(sortedmulti(2,@0,@1))",
-          [
-            "[76223a6e/48'/1'/0'/2']tpubDE7NQymr4AFtewpAsWtnreyq9ghkzQBXpCZjWLFVRAvnbf7vya2eMTvT2fPapNqL8SuVvLQdbUbMfWLVDCZKnsEBqp6UK93QEzL8Ck23AwF/**",
-            "[f5acc2fd/48'/1'/0'/2']tpubDFAqEGNyad35aBCKUAXbQGDjdVhNueno5ZZVEn3sQbW5ci457gLR7HyTmHBg93oourBssgUxuWz1jX5uhc1qaqFo9VsybY1J5FuedLfm4dK/**",
-          ]
-        ),
-        change: 0,
-        addrIndex: 0,
-        expResult: "tb1qmyauyzn08cduzdqweexgna2spwd0rndj55fsrkefry2cpuyt4cpsn2pg28",
-        walletHmac: Buffer.from("d6434852fb3caa7edbd1165084968f1691444b3cfc10cf1e431acbbc7f48451f", "hex")
-      },
-    ];
+        // legacy
+        {
+          policy: new DefaultWalletPolicy("pkh(@0)", "[f5acc2fd/44'/1'/0']tpubDCwYjpDhUdPGP5rS3wgNg13mTrrjBuG8V9VpWbyptX6TRPbNoZVXsoVUSkCjmQ8jJycjuDKBb9eataSymXakTTaGifxR6kmVsfFehH1ZgJT/**"),
+          change: 0,
+          addrIndex: 0,
+          expResult: "mz5vLWdM1wHVGSmXUkhKVvZbJ2g4epMXSm",
+        },
+        {
+          policy: new DefaultWalletPolicy("pkh(@0)", "[f5acc2fd/44'/1'/0']tpubDCwYjpDhUdPGP5rS3wgNg13mTrrjBuG8V9VpWbyptX6TRPbNoZVXsoVUSkCjmQ8jJycjuDKBb9eataSymXakTTaGifxR6kmVsfFehH1ZgJT/**"),
+          change: 1,
+          addrIndex: 15,
+          expResult: "myFCUBRCKFjV7292HnZtiHqMzzHrApobpT",
+        },
+        // native segwit
+        {
+          policy: new DefaultWalletPolicy("wpkh(@0)", "[f5acc2fd/84'/1'/0']tpubDCtKfsNyRhULjZ9XMS4VKKtVcPdVDi8MKUbcSD9MJDyjRu1A2ND5MiipozyyspBT9bg8upEp7a8EAgFxNxXn1d7QkdbL52Ty5jiSLcxPt1P/**"),
+          change: 0,
+          addrIndex: 0,
+          expResult: "tb1qzdr7s2sr0dwmkwx033r4nujzk86u0cy6fmzfjk",
+        },
+        {
+          policy: new DefaultWalletPolicy("wpkh(@0)", "[f5acc2fd/84'/1'/0']tpubDCtKfsNyRhULjZ9XMS4VKKtVcPdVDi8MKUbcSD9MJDyjRu1A2ND5MiipozyyspBT9bg8upEp7a8EAgFxNxXn1d7QkdbL52Ty5jiSLcxPt1P/**"),
+          change: 1,
+          addrIndex: 15,
+          expResult: "tb1qlrvzyx8jcjfj2xuy69du9trtxnsvjuped7e289",
+        },
+        // wrapped segwit
+        {
+          policy: new DefaultWalletPolicy("sh(wpkh(@0))", "[f5acc2fd/49'/1'/0']tpubDC871vGLAiKPcwAw22EjhKVLk5L98UGXBEcGR8gpcigLQVDDfgcYW24QBEyTHTSFEjgJgbaHU8CdRi9vmG4cPm1kPLmZhJEP17FMBdNheh3/**"),
+          change: 0,
+          addrIndex: 0,
+          expResult: "2MyHkbusvLomaarGYMqyq7q9pSBYJRwWcsw",
+        },
+        {
+          policy: new DefaultWalletPolicy("sh(wpkh(@0))", "[f5acc2fd/49'/1'/0']tpubDC871vGLAiKPcwAw22EjhKVLk5L98UGXBEcGR8gpcigLQVDDfgcYW24QBEyTHTSFEjgJgbaHU8CdRi9vmG4cPm1kPLmZhJEP17FMBdNheh3/**"),
+          change: 1,
+          addrIndex: 15,
+          expResult: "2NAbM4FSeBQG4o85kbXw2YNfKypcnEZS9MR",
+        },
+        // taproot
+        {
+          policy: new DefaultWalletPolicy("tr(@0)", "[f5acc2fd/86'/1'/0']tpubDDKYE6BREvDsSWMazgHoyQWiJwYaDDYPbCFjYxN3HFXJP5fokeiK4hwK5tTLBNEDBwrDXn8cQ4v9b2xdW62Xr5yxoQdMu1v6c7UDXYVH27U/**"),
+          change: 0,
+          addrIndex: 0,
+          expResult: "tb1pws8wvnj99ca6acf8kq7pjk7vyxknah0d9mexckh5s0vu2ccy68js9am6u7",
+        },
+        {
+          policy: new DefaultWalletPolicy("tr(@0)", "[f5acc2fd/86'/1'/0']tpubDDKYE6BREvDsSWMazgHoyQWiJwYaDDYPbCFjYxN3HFXJP5fokeiK4hwK5tTLBNEDBwrDXn8cQ4v9b2xdW62Xr5yxoQdMu1v6c7UDXYVH27U/**"),
+          change: 0,
+          addrIndex: 9,
+          expResult: "tb1psl7eyk2jyjzq6evqvan854fts7a5j65rth25yqahkd2a765yvj0qggs5ne",
+        },
+        {
+          policy: new DefaultWalletPolicy("tr(@0)", "[f5acc2fd/86'/1'/0']tpubDDKYE6BREvDsSWMazgHoyQWiJwYaDDYPbCFjYxN3HFXJP5fokeiK4hwK5tTLBNEDBwrDXn8cQ4v9b2xdW62Xr5yxoQdMu1v6c7UDXYVH27U/**"),
+          change: 1,
+          addrIndex: 0,
+          expResult: "tb1pmr60r5vfjmdkrwcu4a2z8h39mzs7a6wf2rfhuml6qgcp940x9cxs7t9pdy",
+        },
+        {
+          policy: new DefaultWalletPolicy("tr(@0)", "[f5acc2fd/86'/1'/0']tpubDDKYE6BREvDsSWMazgHoyQWiJwYaDDYPbCFjYxN3HFXJP5fokeiK4hwK5tTLBNEDBwrDXn8cQ4v9b2xdW62Xr5yxoQdMu1v6c7UDXYVH27U/**"),
+          change: 1,
+          addrIndex: 9,
+          expResult: "tb1p98d6s9jkf0la8ras4nnm72zme5r03fexn29e3pgz4qksdy84ndpqgjak72",
+        },
+        // multisig
+        {
+          policy: new WalletPolicy(
+            "Cold storage",
+            "wsh(sortedmulti(2,@0,@1))",
+            [
+              "[76223a6e/48'/1'/0'/2']tpubDE7NQymr4AFtewpAsWtnreyq9ghkzQBXpCZjWLFVRAvnbf7vya2eMTvT2fPapNqL8SuVvLQdbUbMfWLVDCZKnsEBqp6UK93QEzL8Ck23AwF/**",
+              "[f5acc2fd/48'/1'/0'/2']tpubDFAqEGNyad35aBCKUAXbQGDjdVhNueno5ZZVEn3sQbW5ci457gLR7HyTmHBg93oourBssgUxuWz1jX5uhc1qaqFo9VsybY1J5FuedLfm4dK/**",
+            ]
+          ),
+          change: 0,
+          addrIndex: 0,
+          expResult: "tb1qmyauyzn08cduzdqweexgna2spwd0rndj55fsrkefry2cpuyt4cpsn2pg28",
+          walletHmac: Buffer.from("d6434852fb3caa7edbd1165084968f1691444b3cfc10cf1e431acbbc7f48451f", "hex")
+        },
+      ];
 
     for (const { policy, change, addrIndex, expResult, walletHmac } of testcases) {
       const result = await app.getWalletAddress(policy, walletHmac || null, change, addrIndex, false);
-      expect(result).toEqual(expResult);  
+      console.log(expResult)
+      console.log(result)
+      expect(result).toEqual(expResult);
     }
   });
 
@@ -249,7 +252,8 @@ describe("test AppClient", () => {
     await setSpeculosAutomation(transport, automation);
 
     const [walletId, walletHmac] = await app.registerWallet(walletPolicy);
-
+    console.log(walletId)
+    console.log(walletHmac)
     expect(walletId).toEqual(walletPolicy.getId());
     expect(walletHmac.length).toEqual(32);
   });
@@ -271,7 +275,7 @@ describe("test AppClient", () => {
 
     const psbt = new PsbtV2();
     psbt.deserialize(psbtBuf);
-    const result = await app.signPsbt(psbt, walletPolicy, null, () => {});
+    const result = await app.signPsbt(psbt, walletPolicy, null, () => { });
 
     expect(result.size).toEqual(2);
     expect(result.get(0)).toEqual(Buffer.from(
@@ -292,6 +296,6 @@ describe("test AppClient", () => {
     await setSpeculosAutomation(transport, automation);
 
     const result = await app.signMessage(Buffer.from(msg, "ascii"), path)
-    expect(result).toEqual("H4frM6TYm5ty1MAf9o/Zz9Qiy3VEldAYFY91SJ/5nYMAZY1UUB97fiRjKW8mJit2+V4OCa1YCqjDqyFnD9Fw75k=");
+    expect(result).toEqual("H/UdRAW0qG199HMeweMYFFOgS7ggmNNqwV7HHTYhq6YLb6EiLHJNmBIy0hz06l3GFqxXgNGkk9EU6/Wlpt/RhfU=");
   });
 });

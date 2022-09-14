@@ -22,13 +22,16 @@ def test_bip86(client: Client, speculos_globals: SpeculosGlobals):
     )
 
     # Account 0, first receiving address = m/86'/0'/0'/0/0
+    print(client.get_wallet_address(wallet, None, 0, 0, False))
     res = client.get_wallet_address(wallet, None, 0, 0, False)
     assert res == "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr"
 
     # Account 0, second receiving address = m/86'/0'/0'/0/1
+    print(client.get_wallet_address(wallet, None, 0, 1, False))
     res = client.get_wallet_address(wallet, None, 0, 1, False)
     assert res == "bc1p4qhjn9zdvkux4e44uhx8tc55attvtyu358kutcqkudyccelu0was9fqzwh"
 
     # Account 1, first change address = m/86'/0'/0'/1/0
+    print(client.get_wallet_address(wallet, None, 1, 0, False))
     res = client.get_wallet_address(wallet, None, 1, 0, False)
     assert res == "bc1p3qkhfews2uk44qtvauqyr2ttdsw7svhkl9nkm9s9c3x4ax5h60wqwruhk7"
