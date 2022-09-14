@@ -13,7 +13,7 @@ import { listen } from "@ledgerhq/logs";
 import type { Log } from "@ledgerhq/logs";
 
 
-import { AppClient, DefaultWalletPolicy, PsbtV2 } from ".."
+import { AppClient } from ".."
 
 jest.setTimeout(10000);
 
