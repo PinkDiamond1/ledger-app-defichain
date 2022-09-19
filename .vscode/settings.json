@@ -5,7 +5,8 @@
     "C_Cpp.clang_format_path": "/usr/bin/clang-format",
     "editor.formatOnSave": true,
     "python.testing.pytestArgs": [
-        "tests"
+        "tests",
+        "tests_mainnet"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true
