@@ -45,7 +45,7 @@ def device(request, hid):
     base_args = [
         speculos_executable, "./defichain-testnet-bin/app.elf",
         *lib_arg,
-        "--sdk", "2.1",
+        "--sdk", "2.0",
         "--display", "headless"
     ]
 
