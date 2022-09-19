@@ -12,7 +12,7 @@ def test_sign_message(client: Client):
     path = "m/44'/1'/0'/0/0"
     result = client.sign_message(msg, path)
 
-    assert result == "IOR4YRVlmJGMx+H7PgQvHzWAF0HAgrUggQeRdnoWKpypfaAberpvF+XbOCM5Cd/ljogNyU3w2OIL8eYCyZ6Ru2k="
+    assert result == "ID9jP+6Gn0EvF635X4fyIrqw/zrd1bjNpEkYgYYGxNoxaAIpPEEqatf+QKJKT7WKF2C4EOzsA6BEYf4RjsIvV9w="
 
 
 @has_automation("automations/sign_message_accept.json")
@@ -24,7 +24,7 @@ def test_sign_message_accept(client: Client):
         "m/84'/1'/0'/0/0"
     )
 
-    assert res == 'IEOK4+JMK7FToR7XMzFCoAYh1nud1IKm9Wq3vXLSVk/lBay8rHCRp9bP6riyR5NDqXYyYf7cXgMQTHNz3SemwZI='
+    assert res == "H+Y0qmf9lOt8LXF11oZD//3/0ZyhwGIQ7Bk68h3lFKRqOEC0OeR2L56evqLf2PPgQ7s3Qps/d4pzHD+j0ocm+AU="
 
 
 @has_automation("automations/sign_message_accept.json")
@@ -38,7 +38,7 @@ def test_sign_message_accept_long(client: Client):
         "m/84'/1'/0'/0/8"
     )
 
-    assert res == 'H4frM6TYm5ty1MAf9o/Zz9Qiy3VEldAYFY91SJ/5nYMAZY1UUB97fiRjKW8mJit2+V4OCa1YCqjDqyFnD9Fw75k='
+    assert res == "H/UdRAW0qG199HMeweMYFFOgS7ggmNNqwV7HHTYhq6YLb6EiLHJNmBIy0hz06l3GFqxXgNGkk9EU6/Wlpt/RhfU="
 
 
 @has_automation("automations/sign_message_reject.json")
