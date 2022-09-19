@@ -6,7 +6,8 @@
     "editor.formatOnSave": true,
     "python.testing.pytestArgs": [
         "tests",
-        "tests_mainnet"
+        "tests_mainnet",
+        "tests-legacy"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true

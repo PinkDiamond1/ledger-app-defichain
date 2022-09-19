@@ -36,16 +36,16 @@ def device(request, hid):
 
     lib_path = "./defichain-bin/app.elf"
     if os.path.isfile(lib_path):
-        print("Bitcoin app running with library")
-        lib_arg = ["-l", f"Bitcoin:{lib_path}"]
+        print("DeFiChain app running with library")
+        lib_arg = ["-l", f"DeFiChain:{lib_path}"]
     else:
-        print("Bitcoin app running as native application")
+        print("DeFiChain app running as native application")
         lib_arg = []
 
     base_args = [
         speculos_executable, "./defichain-testnet-bin/app.elf",
         *lib_arg,
-        "--sdk", "2.0",
+        "--sdk", "2.1",
         "--display", "headless"
     ]
 
