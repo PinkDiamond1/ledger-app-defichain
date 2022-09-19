@@ -137,12 +137,6 @@ describe("test AppClient", () => {
     expect(result).toEqual("1fedcf9d");
   });
 
-  it("can get an extended pubkey", async () => {
-    const result = await app.getExtendedPubkey("m/49'/1'/1'/1/3", false);
-
-    expect(result).toEqual("tpubDGxD6st7AMzj6YGzCYzscMw3Rkbwfbgqujm7sqGFgD2Y633QDsNSYUH147LpqCBkn98oTdy6BR2UqH6SDfigDC2qFJVr1cka8CM7Ahvj4nG")
-  });
-
   it("can sign a message", async () => {
     const msg = "The root problem with conventional currency is all the trust that's required to make it work. The central bank must be trusted not to debase the currency, but the history of fiat currencies is full of breaches of that trust. Banks must be trusted to hold our money and transfer it electronically, but they lend it out in waves of credit bubbles with barely a fraction in reserve. We have to trust them with our privacy, trust them not to let identity thieves drain our accounts. Their massive overhead costs make micropayments impossible.";
     const path = "m/84'/1'/0'/0/8";
