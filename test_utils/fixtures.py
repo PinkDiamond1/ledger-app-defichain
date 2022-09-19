@@ -123,19 +123,19 @@ def comm(settings, root_directory, hid, headless, model, sdk, app_version: str) 
         if not os.getenv("SPECULOS_APPNAME"):
             os.environ['SPECULOS_APPNAME'] = f'app:{app_version}'
 
-        app_binary = os.getenv("BITCOIN_APP_BINARY", str(
+        app_binary = os.getenv("DEFICHAIN_APP_BINARY", str(
             repo_root_path.joinpath("bin/app.elf")))
 
-        app_lib_binary = os.getenv("BITCOIN_APP_LIB_BINARY", None)
+        app_lib_binary = os.getenv("DEFICHAIN_APP_LIB_BINARY", None)
         if app_lib_binary:
-            lib_params = ['-l', f"Bitcoin:{app_lib_binary}"]
+            lib_params = ['-l', f"DeFiChain:{app_lib_binary}"]
 
         else:
             lib_params = []
 
         client = SpeculosClient(
             app_binary,
-            ['--model', model, '--sdk', sdk, '--seed', f'{settings["mnemonic"]}']
+            ['--model', model, '--apdu-port', "9000", '--sdk', sdk, '--seed', f'{settings["mnemonic"]}']
             + ["--display", "qt" if not headless else "headless"]
             + lib_params
         )
@@ -159,10 +159,10 @@ def is_speculos(comm: Union[TransportClient, SpeculosClient]) -> bool:
 
 @pytest.fixture
 def bitcoin_network() -> Union[Literal['main'], Literal['test']]:
-    network = os.getenv("BITCOIN_NETWORK", "test")
+    network = os.getenv("DEFICHAIN_NETWORK", "test")
     if network not in ["main", "test"]:
         raise ValueError(
-            f'Invalid value for BITCOIN_NETWORK: {network}')
+            f'Invalid value for DEFICHAIN_NETWORK: {network}')
     return network
 
 
