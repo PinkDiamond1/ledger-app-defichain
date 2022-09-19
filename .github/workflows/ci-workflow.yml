@@ -115,8 +115,8 @@ jobs:
             SDK: "2.1"
           - model: nanox
             SDK: "2.0.2"
-          - model: nanosp
-            SDK: "1.0"
+          #- model: nanosp
+          #  SDK: "1.0"
 
     needs: job_build
     runs-on: ubuntu-latest
