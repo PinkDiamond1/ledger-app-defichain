@@ -63,27 +63,3 @@ def test_untrusted_hash_sign_fail_short_payload(cmd, transport):
     # should fail if the payload is less than 7 bytes
     sw, _ = transport.exchange(0xE0, 0x48, 0x00, 0x00, None, b"\x01\x02\x03\x04\x05\x06")
     assert sw == 0x6700
-
-
-@has_automation("automations/accept.json")
-def test_sign_p2wpkh_accept(cmd):
-    for filepath in Path("data").rglob("p2wpkh/tx.json"):
-        sign_from_json(cmd, filepath)
-
-
-@has_automation("automations/accept.json")
-def test_sign_p2sh_p2wpkh_accept(cmd):
-    for filepath in Path("data").rglob("p2sh-p2wpkh/tx.json"):
-        sign_from_json(cmd, filepath)
-
-
-@has_automation("automations/accept.json")
-def test_sign_p2pkh_accept(cmd):
-    for filepath in Path("data").rglob("p2pkh/tx.json"):
-        sign_from_json(cmd, filepath)
-
-
-@has_automation("automations/reject.json")
-def test_sign_fail_p2pkh_reject(cmd):
-    with pytest.raises(ConditionOfUseNotSatisfiedError):
-        sign_from_json(cmd, "./data/one-to-one/p2pkh/tx.json")

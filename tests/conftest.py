@@ -1,6 +1,8 @@
 import random
 import binascii
 import hashlib
+import string
+import random
 from typing import Tuple
 
 from test_utils.fixtures import *
@@ -26,10 +28,10 @@ DEFICHAIN_DIRNAME = os.getenv("DEFICHAIN_DIRNAME", ".test_bitcoin")
 
 
 rpc_url = "http://%s:%s@%s:%s" % (
-    os.getenv("BTC_RPC_USER", "user"),
-    os.getenv("BTC_RPC_PASSWORD", "passwd"),
-    os.getenv("BTC_RPC_HOST", "127.0.0.1"),
-    os.getenv("BTC_RPC_PORT", "18443")
+    os.getenv("DFI_RPC_USER", "user"),
+    os.getenv("DFI_RPC_PASSWORD", "passwd"),
+    os.getenv("DFI_RPC_HOST", "127.0.0.1"),
+    os.getenv("DFI_RPC_PORT", "18443")
 )
 
 utxos = list()
@@ -45,35 +47,48 @@ def get_wallet_rpc(wallet_name: str) -> AuthServiceProxy:
 
 
 def setup_node():
-    global btc_addr
+    global dfi_addr
+    letters = string.ascii_lowercase
+    global wallet_name 
+    wallet_name = ''.join(random.choice(letters) for i in range(20))
 
-    # Check bitcoind is running while generating the address
+    # Check defid is running while generating the address
     while True:
-        rpc = get_rpc()
+        rpc = get_wallet_rpc(wallet_name)
         try:
-            print(rpc.createwallet(wallet_name="test_wallet", descriptors=True))
-            btc_addr = rpc.getnewaddress()
+            rpc.createwallet(wallet_name=wallet_name)
+            dfi_addr = rpc.getnewaddress()
             break
 
         except ConnectionError as e:
             sleep(1)
         except JSONRPCException as e:
+            wallet_name = ''.join(random.choice(letters) for i in range(20))
             if "Loading wallet..." in str(e):
                 sleep(1)
+            print(e);
 
+    print("wallet setup...")
+
+    print(rpc.importprivkey("cRiRQ9cHmy5evDqNDdEV8f6zfbK6epi9Fpz4CRZsmLEmkwy54dWz", "operator", True))
+    print(rpc.importprivkey("cPGEaz8AGiM71NGMRybbCqFNRcuUhg3uGvyY4TFE1BZC26EW2PkC", "owner", True))
     # Mine enough blocks so coinbases are mature and we have enough funds to run everything
-    rpc.generatetoaddress(105, btc_addr)
+    rpc.generatetoaddress(105, "mswsMVsyGMj1FzDMbbxw2QW3KvQAv2FKiy", 1)
 
 
 @pytest.fixture(scope="session")
-def run_bitcoind():
-    # Run bitcoind in a separate folder
+def run_defid():
+    # Run defid in a separate folder
     os.makedirs(DEFICHAIN_DIRNAME, exist_ok=True)
 
-    bitcoind = os.getenv("defid", "defid")
+    defid = os.getenv("defid", "defid")
 
-    shutil.copy(os.path.join(os.path.dirname(__file__), "defichain.conf"), DEFICHAIN_DIRNAME)
-    subprocess.Popen([bitcoind, f"--datadir={DEFICHAIN_DIRNAME}"])
+    print(os.getenv("PATH"))
+
+    print("starting defid")
+    shutil.copy(os.path.join(os.path.dirname(__file__), "defi.conf"), DEFICHAIN_DIRNAME)
+    subprocess.Popen([defid, f"--datadir={DEFICHAIN_DIRNAME}", f"-txindex", "-regtest", "-printtoconsole", "-jellyfish_regtest=1", "-txnotokens=0", "-logtimemicros", "-txindex=1", "-acindex=1", "-amkheight=0", "-bayfrontheight=1", "-bayfrontgardensheight=2", "-clarkequayheight=3", "-dakotaheight=4", "-dakotacrescentheight=5", "-eunosheight=6", "-eunospayaheight=7", "-fortcanningheight=8", "-fortcanningmuseumheight=9", "-fortcanninghillheight=10", "-fortcanningroadheight=11", "-fortcanningcrunchheight=12", "-fortcanningspringheight=13", "-dummypos=0", "-spv=1", "-anchorquorum=2", "-masternode_operator=mswsMVsyGMj1FzDMbbxw2QW3KvQAv2FKiy"])
+    print("started defid")
 
     # Make sure the node is ready, and generate some initial blocks
     setup_node()
@@ -87,12 +102,12 @@ def run_bitcoind():
 
 
 @pytest.fixture(scope="session")
-def rpc(run_bitcoind):
+def rpc(run_defid):
     return get_rpc()
 
 
 @pytest.fixture(scope="session")
-def rpc_test_wallet(run_bitcoind):
+def rpc_test_wallet(run_defid):
     return get_wallet_rpc("test_wallet")
 
 

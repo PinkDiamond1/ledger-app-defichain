@@ -115,8 +115,8 @@ jobs:
             SDK: "2.1"
           - model: nanox
             SDK: "2.0.2"
-          - model: nanosp
-            SDK: "1.0"
+          #- model: nanosp
+          #  SDK: "1.0"
 
     needs: job_build
     runs-on: ubuntu-latest
@@ -229,7 +229,7 @@ jobs:
         run: |
           cd bitcoin_client_js
           yarn install
-          LOG_SPECULOS=1 LOG_APDUS=1 SPECULOS="/speculos/speculos.py" yarn test
+          START_SPECULOS=1 LOG_SPECULOS=1 LOG_APDUS=1 SPECULOS="/speculos/speculos.py" yarn test
 
   job_test_legacy_native:
     name: Legacy tests

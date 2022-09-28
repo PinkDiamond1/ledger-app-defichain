@@ -36,10 +36,10 @@ def device(request, hid):
 
     lib_path = "./defichain-bin/app.elf"
     if os.path.isfile(lib_path):
-        print("Bitcoin app running with library")
+        print("DeFiChain app running with library")
         lib_arg = ["-l", f"Bitcoin:{lib_path}"]
     else:
-        print("Bitcoin app running as native application")
+        print("DeFiChain app running as native application")
         lib_arg = []
 
     base_args = [

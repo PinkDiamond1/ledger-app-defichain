@@ -3,5 +3,12 @@
         "*.h": "c"
     },
     "C_Cpp.clang_format_path": "/usr/bin/clang-format",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "python.testing.pytestArgs": [
+        "tests",
+        "tests_mainnet",
+        "tests-legacy"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }
