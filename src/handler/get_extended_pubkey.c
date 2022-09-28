@@ -36,7 +36,8 @@ static bool is_path_safe_for_pubkey_export(const uint32_t bip32_path[],
                                            size_t bip32_path_len,
                                            const uint32_t coin_types[],
                                            size_t coin_types_length) {
-    if (G_coin_config->kind == COIN_KIND_DEFICHAIN || G_coin_config->kind == COIN_KIND_DEFICHAIN_TESTNET) {
+    if (G_coin_config->kind == COIN_KIND_DEFICHAIN || 
+        G_coin_config->kind == COIN_KIND_DEFICHAIN_TESTNET) {
         return true;
     }
     uint32_t purpose = bip32_path[0] & 0x7FFFFFFF;

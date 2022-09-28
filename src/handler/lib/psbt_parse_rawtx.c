@@ -261,10 +261,7 @@ static int parse_rawtxoutput_scriptpubkey(parse_rawtxoutput_state_t *state, buff
 }
 
 static int parse_rawtxoutput_tokenid(parse_rawtxoutput_state_t *state, buffer_t *buffers[2]) {
-    PRINTF("parse_rawtxoutput_tokenid\n");
-    PRINTF("parse_rawtxoutput_tokenid, tx_version is %d\n", state->parent_state->tx_version);
-    if(state->parent_state->tx_version > 3) {
-        PRINTF("parsind tokenId and add it to the hash!");
+    if (state->parent_state->tx_version > 3) {
         uint64_t tokenId;
         bool result = dbuffer_read_varint(buffers, &tokenId);
         if (result) { 
@@ -405,7 +402,6 @@ static int parse_rawtx_outputs_init(parse_rawtx_state_t *state, buffer_t *buffer
 static int parse_rawtx_outputs(parse_rawtx_state_t *state, buffer_t *buffers[2]) {
     while (state->out_counter < state->n_outputs) {
         while (true) {
-            
             bool result = parser_run(parse_rawtxoutput_steps,
                                      n_parse_rawtxoutput_steps,
                                      &state->output_parser_context,
