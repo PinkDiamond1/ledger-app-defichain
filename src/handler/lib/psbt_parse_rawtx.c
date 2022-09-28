@@ -264,7 +264,7 @@ static int parse_rawtxoutput_tokenid(parse_rawtxoutput_state_t *state, buffer_t 
     if (state->parent_state->tx_version > 3) {
         uint64_t tokenId;
         bool result = dbuffer_read_varint(buffers, &tokenId);
-        if (result) { 
+        if (result) {
             crypto_hash_update_varint(&state->parent_state->hash_context->header, tokenId);
         }
         return result;
