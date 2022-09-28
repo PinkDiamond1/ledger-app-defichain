@@ -197,6 +197,7 @@ static int get_amount_scriptpubkey_from_psbt_nonwitness(
     }
 
     txid_parser_outputs_t parser_outputs;
+    PRINTF("Parse raw psbt tx\n");
     // request non-witness utxo, and get the prevout's value and scriptpubkey
     int res = call_psbt_parse_rawtx(dc,
                                     input_map,
@@ -212,6 +213,9 @@ static int get_amount_scriptpubkey_from_psbt_nonwitness(
     // if expected_prevout_hash is given, check that it matches the txid obtained from the parser
     if (expected_prevout_hash != NULL &&
         memcmp(parser_outputs.txid, expected_prevout_hash, 32) != 0) {
+        PRINTF("--- parser txid:\n%.*H\n", 32, parser_outputs.txid);
+        PRINTF("--- expected prevout:\n%.*H\n", 32, expected_prevout_hash);
+
         PRINTF("Prevout hash did not match non-witness-utxo transaction hash\n");
 
         return -1;
@@ -300,6 +304,7 @@ void handler_sign_psbt(dispatcher_context_t *dc) {
     sign_psbt_state_t *state = (sign_psbt_state_t *) &G_command_state;
 
     // Device must be unlocked
+    PRINTF("sign_psbt\n");
     if (os_global_pin_is_validated() != BOLOS_UX_OK) {
         SEND_SW(dc, SW_SECURITY_STATUS_NOT_SATISFIED);
         return;

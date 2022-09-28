@@ -76,7 +76,8 @@ static bool check_output_displayable() {
         (!(G_coin_config->kind == COIN_KIND_QTUM || G_coin_config->kind == COIN_KIND_HYDRA) &&
          !btchip_output_script_is_regular(btchip_context_D.currentOutput + 8) &&
          !isP2sh && !(nullAmount && isOpReturn))) {
-        PRINTF("Error : Unrecognized output script");
+        PRINTF("Error : Unrecognized output script\n");
+        PRINTF("Output:\n%.*H\n", sizeof(btchip_context_D.currentOutput), btchip_context_D.currentOutput);
         THROW(EXCEPTION);
     }
     if (btchip_context_D.tmpCtx.output.changeInitialized && !isOpReturn) {

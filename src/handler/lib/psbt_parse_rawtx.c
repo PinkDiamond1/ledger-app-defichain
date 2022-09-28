@@ -37,6 +37,7 @@ typedef struct parse_rawtx_state_s {
     bool is_segwit;
     unsigned int n_inputs;
     unsigned int n_outputs;
+    int tx_version;
 
     union {
         // since the parsing stages of inputs, outputs and witnesses are disjoint, we reuse the same
@@ -259,11 +260,27 @@ static int parse_rawtxoutput_scriptpubkey(parse_rawtxoutput_state_t *state, buff
     }
 }
 
+static int parse_rawtxoutput_tokenid(parse_rawtxoutput_state_t *state, buffer_t *buffers[2]) {
+    PRINTF("parse_rawtxoutput_tokenid\n");
+    PRINTF("parse_rawtxoutput_tokenid, tx_version is %d\n", state->parent_state->tx_version);
+    if(state->parent_state->tx_version > 3) {
+        PRINTF("parsind tokenId and add it to the hash!");
+        uint64_t tokenId;
+        bool result = dbuffer_read_varint(buffers, &tokenId);
+        if (result) { 
+            crypto_hash_update_varint(&state->parent_state->hash_context->header, tokenId);
+        }
+        return result;
+    }
+    return 1;
+}
+
 static const parsing_step_t parse_rawtxoutput_steps[] = {
     (parsing_step_t) parse_rawtxoutput_value,
     (parsing_step_t) parse_rawtxoutput_scriptpubkey_size,
     (parsing_step_t) parse_rawtxoutput_scriptpubkey_init,
     (parsing_step_t) parse_rawtxoutput_scriptpubkey,
+    (parsing_step_t) parse_rawtxoutput_tokenid,
 };
 
 const int n_parse_rawtxoutput_steps =
@@ -274,7 +291,11 @@ const int n_parse_rawtxoutput_steps =
 static int parse_rawtx_version(parse_rawtx_state_t *state, buffer_t *buffers[2]) {
     uint8_t version_bytes[4];
 
+    PRINTF("Parsing tx version...\n");
+
     bool result = dbuffer_read_bytes(buffers, version_bytes, 4);
+    state->tx_version = version_bytes[0];
+
     if (result) {
         crypto_hash_update(&state->hash_context->header, version_bytes, 4);
     }
@@ -384,6 +405,7 @@ static int parse_rawtx_outputs_init(parse_rawtx_state_t *state, buffer_t *buffer
 static int parse_rawtx_outputs(parse_rawtx_state_t *state, buffer_t *buffers[2]) {
     while (state->out_counter < state->n_outputs) {
         while (true) {
+            
             bool result = parser_run(parse_rawtxoutput_steps,
                                      n_parse_rawtxoutput_steps,
                                      &state->output_parser_context,

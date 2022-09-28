@@ -134,6 +134,8 @@ struct btchip_transaction_context_s {
     unsigned char relaxed;
     /** If the transaction consumes a P2SH input */
     unsigned char consumeP2SH;
+    /** Token Id of the current parsed output **/
+    unsigned char tokenId;
 };
 typedef struct btchip_transaction_context_s btchip_transaction_context_t;
 

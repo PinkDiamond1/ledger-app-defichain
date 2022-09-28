@@ -804,9 +804,15 @@ void transaction_parse(unsigned char parseMode) {
                         transaction_get_varint();
 
                     PRINTF("Script to read " DEBUG_LONG "\n",btchip_context_D.transactionContext.scriptRemaining);
+
+
                     // Move on
                     btchip_context_D.transactionContext.transactionState =
                         BTCHIP_TRANSACTION_OUTPUT_HASHING_IN_PROGRESS_OUTPUT_SCRIPT;
+
+                    if (btchip_context_D.transactionDataRemaining > 0 && btchip_context_D.transactionVersion[0] > 3) {
+                        btchip_context_D.transactionContext.tokenId = transaction_get_varint();
+                    }
 
                     // no break is intentional
                 }
@@ -830,14 +836,6 @@ void transaction_parse(unsigned char parseMode) {
 
                     if (btchip_context_D.transactionDataRemaining < 1) {
                         // No more data to read, ok
-
-                        int txVersion = transaction_get_varint_from_buffer(btchip_context_D.transactionVersion, 4);
-                        PRINTF("txversion is %i\n", txVersion);
-                        if(txVersion > 3) {
-                            //read tokenId for tx version >= 4
-                            transaction_get_varint();
-                        }
-
                         goto ok;
                     }
                     if (btchip_context_D.transactionContext.scriptRemaining ==

@@ -36,8 +36,8 @@ static bool is_path_safe_for_pubkey_export(const uint32_t bip32_path[],
                                            size_t bip32_path_len,
                                            const uint32_t coin_types[],
                                            size_t coin_types_length) {
-    if (G_coin_config->bip44_coin_type == DEFICHAIN_COIN_TYPE) {
-        return false;
+    if (G_coin_config->kind == COIN_KIND_DEFICHAIN || G_coin_config->kind == COIN_KIND_DEFICHAIN_TESTNET) {
+        return true;
     }
     uint32_t purpose = bip32_path[0] & 0x7FFFFFFF;
 
@@ -123,9 +123,11 @@ void handler_get_extended_pubkey(dispatcher_context_t *dc) {
 
     LOG_PROCESSOR(dc, __FILE__, __LINE__, __func__);
 
+    PRINTF("get extended pubkey\n");
     // Device must be unlocked
     if (os_global_pin_is_validated() != BOLOS_UX_OK) {
         SEND_SW(dc, SW_SECURITY_STATUS_NOT_SATISFIED);
+        PRINTF("SW_SECURITY_STATUS_NOT_SATISFIED\n");
         return;
     }
 
@@ -134,17 +136,20 @@ void handler_get_extended_pubkey(dispatcher_context_t *dc) {
     if (!buffer_read_u8(&dc->read_buffer, &display) ||
         !buffer_read_u8(&dc->read_buffer, &bip32_path_len)) {
         SEND_SW(dc, SW_WRONG_DATA_LENGTH);
+        PRINTF("SW_WRONG_DATA_LENGTH\n");
         return;
     }
 
     if (display > 1 || bip32_path_len > MAX_BIP32_PATH_STEPS) {
         SEND_SW(dc, SW_INCORRECT_DATA);
+        PRINTF("SW_INCORRECT_DATA\n");
         return;
     }
 
     uint32_t bip32_path[MAX_BIP32_PATH_STEPS];
     if (!buffer_read_bip32_path(&dc->read_buffer, bip32_path, bip32_path_len)) {
         SEND_SW(dc, SW_WRONG_DATA_LENGTH);
+        PRINTF("SW_WRONG_DATA_LENGTH\n");
         return;
     }
 
@@ -153,6 +158,7 @@ void handler_get_extended_pubkey(dispatcher_context_t *dc) {
 
     if (!is_safe && !display) {
         SEND_SW(dc, SW_NOT_SUPPORTED);
+        PRINTF("SW_NOT_SUPPORTED\n");
         return;
     }
 
@@ -163,6 +169,7 @@ void handler_get_extended_pubkey(dispatcher_context_t *dc) {
                                                state->serialized_pubkey_str);
     if (serialized_pubkey_len == -1) {
         SEND_SW(dc, SW_BAD_STATE);
+        PRINTF("SW_BAD_STATE\n");
         return;
     }
 
